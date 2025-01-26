@@ -113,7 +113,7 @@ const Chat = ({ channelId, onClose }) => {
           </div>
         ))}
       </div>
-      <div className="flex gap-x-2">
+      <div className="flex gap-x-2 z-50">
         <input
           type="text"
           value={newMessage}
