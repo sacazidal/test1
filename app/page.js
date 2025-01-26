@@ -48,7 +48,7 @@ export default function Home() {
   }, [supabase]);
 
   return (
-    <div className="container mx-auto flex gap-x-5">
+    <div className="container mx-auto flex gap-x-5 h-screen">
       <div className="flex flex-col max-w-md justify-start">
         <h1 className="text-2xl font-bold mb-4">Каналы</h1>
         <CreateChannel />
