@@ -50,9 +50,36 @@ const Chat = ({ channelId, onClose }) => {
   const handleSendMessage = async () => {
     if (!newMessage.trim()) return;
 
-    const { error } = await supabase
-      .from("messages")
-      .insert([{ channel_id: channelId, message: newMessage }]);
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      console.error("Пользователь не авторизован");
+      return;
+    }
+
+    const { data: userData, error: userError } = await supabase
+      .from("users")
+      .select("username")
+      .eq("id", user.id)
+      .single();
+
+    if (userError) {
+      console.error("Ошибка получения username:", userError);
+      return;
+    }
+
+    const username = userData.username;
+
+    const { error } = await supabase.from("messages").insert([
+      {
+        channel_id: channelId,
+        message: newMessage,
+        user_id: user.id,
+        m_username: username,
+      },
+    ]);
 
     if (error) {
       console.error(error);
@@ -77,7 +104,9 @@ const Chat = ({ channelId, onClose }) => {
       <div className="flex-1 overflow-y-auto mt-6">
         {messages.map((message) => (
           <div key={message.id} className="mb-2 p-2 bg-neutral-700 rounded-lg">
-            <p className="text-white">{message.message}</p>
+            <p className="text-white">
+              <strong>{message.m_username}:</strong> {message.message}
+            </p>
             <span className="text-xs text-gray-400">
               {new Date(message.created_at).toLocaleTimeString()}
             </span>

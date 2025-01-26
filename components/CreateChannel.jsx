@@ -10,6 +10,16 @@ export default function CreateChannel() {
 
   const handleCreateChannel = async () => {
     if (!channelName) return;
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      console.error("Пользователь не авторизован");
+      return;
+    }
+
     let imageUrl = null;
 
     if (imageFile) {
@@ -32,7 +42,7 @@ export default function CreateChannel() {
 
     const { data, error } = await supabase
       .from("channels")
-      .insert([{ name: channelName, image_url: imageUrl }])
+      .insert([{ name: channelName, image_url: imageUrl, user_id: user.id }])
       .select();
 
     if (error) {
