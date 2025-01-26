@@ -88,7 +88,7 @@ const Chat = ({ channelId, onClose }) => {
     }
   };
   return (
-    <div className="flex flex-col h-full max-h-[calc(100vh-100px)] bg-neutral-800 rounded-lg p-4 w-full relative">
+    <div className="flex flex-col h-full max-h-screen xs:max-h-[calc(100vh-500px)] bg-neutral-800 rounded-lg p-4 w-full relative">
       <button
         className="absolute top-2 right-4 hover:bg-neutral-700 rounded-full transition-color"
         onClick={onClose}
