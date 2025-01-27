@@ -38,7 +38,7 @@ const page = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col h-screen items-center justify-center"
+      className="flex flex-col h-screen max-h-[calc(100vh-80px)] items-center justify-center"
     >
       <div className="space-y-4 border-2 border-zinc-800 rounded-xl px-5 md:px-8 lg:px-10 py-7 max-w-lg w-full flex flex-col items-center justify-center">
         <h2 className="text-2xl font-semibold ">Вход</h2>
