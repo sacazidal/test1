@@ -2,6 +2,7 @@
 
 import { createClient } from "@/utils/supabase/client";
 import { useState } from "react";
+import { FaUpload } from "react-icons/fa";
 
 export default function CreateChannel() {
   const supabase = createClient();
@@ -70,12 +71,24 @@ export default function CreateChannel() {
         placeholder="Название канала"
         className="w-full p-2 mb-2 bg-neutral-800 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
       />
-      <input
-        type="file"
-        onChange={(e) => setImageFile(e.target.files[0])}
-        accept="image/*"
-        className="mb-2"
-      />
+      <div className="relative mb-2">
+        <input
+          type="file"
+          onChange={(e) => setImageFile(e.target.files[0])}
+          accept="image/*"
+          className="hidden"
+          id="file-upload"
+        />
+        <label
+          htmlFor="file-upload"
+          className="w-full p-2 bg-neutral-800 text-white rounded-lg border-2 border-neutral-700 hover:border-blue-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 transition-all duration-300 cursor-pointer flex items-center justify-center gap-2"
+        >
+          <FaUpload className="text-neutral-400" />
+          <span className="text-neutral-400">
+            {imageFile ? imageFile.name : "Выберите изображение"}
+          </span>
+        </label>
+      </div>
       <button
         onClick={handleCreateChannel}
         className="w-full p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center"

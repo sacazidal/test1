@@ -62,7 +62,7 @@ export default function Home() {
 
   return (
     <div className="container mx-auto flex gap-x-5 h-screen max-h-[calc(100vh-80px)] xs:max-h-[calc(100vh-80px)]">
-      <div className="flex flex-col max-w-md justify-start px-4 lg:px-0">
+      <div className="flex flex-col w-full max-w-md justify-start px-4 lg:px-0">
         <h1 className="text-2xl font-bold mb-4">Каналы</h1>
         <CreateChannel />
         <div className={`${selectedChannelId ? "hidden md:block" : "block"}`}>
