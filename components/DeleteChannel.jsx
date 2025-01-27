@@ -24,6 +24,7 @@ const DeleteChannel = ({ channelId, imageUrl, user_id }) => {
       console.error("User does not have permission to delete this channel");
       return;
     }
+
     if (imageUrl) {
       const filePath = imageUrl.split("/").pop();
       const { error: storageError } = await supabase.storage
@@ -45,11 +46,11 @@ const DeleteChannel = ({ channelId, imageUrl, user_id }) => {
     } else {
       console.log("Channel is deleted!");
     }
-
-    if (user?.id !== user_id) {
-      return null;
-    }
   };
+
+  if (user?.id !== user_id) {
+    return <div className="w-5 h-5"></div>;
+  }
 
   return (
     <button onClick={handleDeleteChannel}>
