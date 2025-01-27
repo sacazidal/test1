@@ -85,6 +85,7 @@ export default function Home() {
                     <DeleteChannel
                       channelId={channel.id}
                       imageUrl={channel.image_url}
+                      user_id={channel.user_id}
                     />
                   </div>
                 </div>

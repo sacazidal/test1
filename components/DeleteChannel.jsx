@@ -4,7 +4,7 @@ import { createClient } from "@/utils/supabase/client";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-const DeleteChannel = ({ channelId, imageUrl }) => {
+const DeleteChannel = ({ channelId, imageUrl, user_id }) => {
   const supabase = createClient();
   const [user, setUser] = useState(null);
 
