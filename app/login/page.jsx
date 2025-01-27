@@ -8,6 +8,7 @@ const page = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const supabase = createClient();
   const router = useRouter();
@@ -22,17 +23,21 @@ const page = () => {
       return;
     }
 
+    setLoading(true);
+
     const { error: authError } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
     if (authError) {
       setError(authError.message);
+      setLoading(false);
       return;
     }
 
     setError("");
     router.push("/");
+    setLoading(false);
   };
 
   return (
@@ -61,9 +66,16 @@ const page = () => {
         {error && <p className="text-red-500 text-sm text-center">{error}</p>}
         <button
           type="submit"
-          className="border-2 rounded-lg py-2 px-6 sm:px-8 md:px-10 lg:px-14 bg-zinc-100 text-zinc-950 font-medium transition-colors duration-300"
+          className="border-2 rounded-lg py-2 px-6 sm:px-8 md:px-10 lg:px-14 bg-zinc-100 text-zinc-950 font-medium transition-colors duration-300 flex items-center justify-center"
         >
-          Войти
+          {loading ? (
+            <div className="flex items-center gap-2">
+              <div className="w-5 h-5 border-2 border-white border-t-2 border-t-blue-500 rounded-full animate-spin"></div>
+              <span>Входим...</span>
+            </div>
+          ) : (
+            "Войти"
+          )}
         </button>
       </div>
     </form>

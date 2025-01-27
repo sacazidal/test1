@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 const DeleteChannel = ({ channelId, imageUrl, user_id }) => {
   const supabase = createClient();
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -17,11 +18,14 @@ const DeleteChannel = ({ channelId, imageUrl, user_id }) => {
     };
 
     fetchUser();
+    setLoading(false);
   }, [supabase]);
 
   const handleDeleteChannel = async () => {
+    setLoading(true);
     if (user?.id !== user_id) {
       console.error("User does not have permission to delete this channel");
+      setLoading(false);
       return;
     }
 
@@ -32,6 +36,7 @@ const DeleteChannel = ({ channelId, imageUrl, user_id }) => {
         .remove([filePath]);
 
       if (storageError) {
+        setLoading(false);
         console.error("Error deleting from storage:", storageError);
       }
     }
@@ -42,10 +47,12 @@ const DeleteChannel = ({ channelId, imageUrl, user_id }) => {
       .eq("id", channelId);
 
     if (error) {
+      setLoading(false);
       console.error("Error deleting channel:", error);
     } else {
       console.log("Channel is deleted!");
     }
+    setLoading(false);
   };
 
   if (user?.id !== user_id) {
@@ -54,7 +61,11 @@ const DeleteChannel = ({ channelId, imageUrl, user_id }) => {
 
   return (
     <button onClick={handleDeleteChannel}>
-      <Image src={"/TrashCan.svg"} alt="Trash" width={20} height={20} />
+      {loading ? (
+        <div className="w-5 h-5 border-2 border-white border-t-2 border-t-blue-500 rounded-full animate-spin"></div>
+      ) : (
+        <Image src={"/TrashCan.svg"} alt="Trash" width={20} height={20} />
+      )}
     </button>
   );
 };

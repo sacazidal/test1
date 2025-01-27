@@ -7,6 +7,7 @@ import { createClient } from "@/utils/supabase/client";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import ChannelAvatar from "@/components/ChannelAvatar";
 
 export default function Home() {
   const supabase = createClient();
@@ -73,16 +74,10 @@ export default function Home() {
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-x-3">
-                    {channel.image_url && (
-                      <Image
-                        src={channel.image_url}
-                        alt={channel.name}
-                        width={35}
-                        height={35}
-                        style={{ width: "35px", height: "35px" }}
-                        priority
-                      />
-                    )}
+                    <ChannelAvatar
+                      imageUrl={channel.image_url}
+                      name={channel.name}
+                    />
                     <h3 className="text-lg font-medium text-white">
                       {channel.name}
                     </h3>

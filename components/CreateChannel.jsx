@@ -7,9 +7,12 @@ export default function CreateChannel() {
   const supabase = createClient();
   const [channelName, setChannelName] = useState("");
   const [imageFile, setImageFile] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleCreateChannel = async () => {
     if (!channelName) return;
+
+    setLoading(true);
 
     const {
       data: { user },
@@ -17,6 +20,7 @@ export default function CreateChannel() {
 
     if (!user) {
       console.error("Пользователь не авторизован");
+      setLoading(false);
       return;
     }
 
@@ -30,6 +34,7 @@ export default function CreateChannel() {
 
       if (error) {
         console.error("Error uploading image:", error);
+        setLoading(false);
         return;
       }
 
@@ -46,9 +51,11 @@ export default function CreateChannel() {
       .select();
 
     if (error) {
+      setLoading(false);
       console.error(error);
     } else {
       console.log("Channel created:", data);
+      setLoading(false);
       setChannelName("");
       setImageFile(null);
     }
@@ -71,9 +78,16 @@ export default function CreateChannel() {
       />
       <button
         onClick={handleCreateChannel}
-        className="w-full p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+        className="w-full p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center"
       >
-        Создать канал
+        {loading ? (
+          <div className="flex items-center gap-2">
+            <div className="w-5 h-5 border-2 border-white border-t-2 border-t-blue-500 rounded-full animate-spin"></div>
+            <span>Создаем канал...</span>
+          </div>
+        ) : (
+          "Создать канал"
+        )}
       </button>
     </div>
   );

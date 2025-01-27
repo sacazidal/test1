@@ -8,6 +8,7 @@ const Chat = ({ channelId, onClose }) => {
   const supabase = createClient();
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -50,12 +51,15 @@ const Chat = ({ channelId, onClose }) => {
   const handleSendMessage = async () => {
     if (!newMessage.trim()) return;
 
+    setLoading(true);
+
     const {
       data: { user },
     } = await supabase.auth.getUser();
 
     if (!user) {
       console.error("Пользователь не авторизован");
+      setLoading(false);
       return;
     }
 
@@ -67,6 +71,7 @@ const Chat = ({ channelId, onClose }) => {
 
     if (userError) {
       console.error("Ошибка получения username:", userError);
+      setLoading(false);
       return;
     }
 
@@ -83,9 +88,11 @@ const Chat = ({ channelId, onClose }) => {
 
     if (error) {
       console.error(error);
+      setLoading(false);
     } else {
       setNewMessage("");
     }
+    setLoading(false);
   };
   return (
     <div className="flex flex-col h-full max-h-[calc(100vh-20px)] xs:max-h-[calc(100vh-20)] bg-neutral-800 rounded-lg p-4 w-full relative">
@@ -123,9 +130,13 @@ const Chat = ({ channelId, onClose }) => {
         />
         <button
           onClick={handleSendMessage}
-          className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center"
         >
-          Отправить
+          {loading ? (
+            <div className="w-[21px] h-5 border-2 border-white border-t-2 border-t-blue-500 rounded-full animate-spin mx-[34px]"></div>
+          ) : (
+            "Отправить"
+          )}
         </button>
       </div>
     </div>
