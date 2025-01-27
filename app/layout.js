@@ -10,6 +10,27 @@ const poppins = Poppins({
 export const metadata = {
   title: "Provider-X",
   description: "Чат для общения",
+  openGraph: {
+    title: "Provider-X",
+    description: "Чат для общения",
+    url: "https://test1-kappa-snowy.vercel.app/",
+    siteName: "Provider-X",
+    images: [
+      {
+        url: "https://s3.amazonaws.com/protocols-files/files/j55jcz36.jpg",
+        width: 800,
+        height: 600,
+      },
+    ],
+    locale: "ru_RU",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Provider-X",
+    description: "Чат для общения",
+    images: ["https://s3.amazonaws.com/protocols-files/files/j55jcz36.jpg"],
+  },
 };
 
 export default function RootLayout({ children }) {

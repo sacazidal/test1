@@ -4,7 +4,6 @@ import CreateChannel from "@/components/CreateChannel";
 import DeleteChannel from "@/components/DeleteChannel";
 import Chat from "@/components/Chat";
 import { createClient } from "@/utils/supabase/client";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import ChannelAvatar from "@/components/ChannelAvatar";
