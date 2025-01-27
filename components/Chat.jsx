@@ -121,8 +121,10 @@ const Chat = ({ channelId, onClose }) => {
   };
 
   const handleDeleteChannel = async (messageId, messageUserId) => {
+    setLoading(true);
     if (!currentUser || messageUserId !== currentUser.id) {
       console.error("У вас нет прав на удаление сообщения");
+      setLoading(false);
       return;
     }
 
@@ -133,7 +135,9 @@ const Chat = ({ channelId, onClose }) => {
 
     if (error) {
       console.error("Ошибка при удалении сообщения:", error);
+      setLoading(false);
     }
+    setLoading(false);
   };
 
   return (
@@ -166,21 +170,24 @@ const Chat = ({ channelId, onClose }) => {
                 </span>
               </div>
 
-              {currentUser && message.user_id === currentUser.id && (
-                <button
-                  onClick={() =>
-                    handleDeleteChannel(message.id, message.user_id)
-                  }
-                  className=""
-                >
-                  <Image
-                    src={"/TrashCan.svg"}
-                    alt="delete"
-                    width={20}
-                    height={20}
-                  />
-                </button>
-              )}
+              {currentUser &&
+                message.user_id === currentUser.id &&
+                (loading ? (
+                  <div className="w-5 h-5 border-2 border-white border-t-2 border-t-blue-500 rounded-full animate-spin"></div>
+                ) : (
+                  <button
+                    onClick={() =>
+                      handleDeleteChannel(message.id, message.user_id)
+                    }
+                  >
+                    <Image
+                      src={"/TrashCan.svg"}
+                      alt="delete"
+                      width={20}
+                      height={20}
+                    />
+                  </button>
+                ))}
             </div>
           </div>
         ))}
