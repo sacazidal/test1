@@ -9,6 +9,18 @@ const Chat = ({ channelId, onClose }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setCurrentUser(user);
+    };
+
+    fetchUser();
+  }, []);
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -39,6 +51,19 @@ const Chat = ({ channelId, onClose }) => {
         },
         (payload) => {
           setMessages((prev) => [...prev, payload.new]);
+        }
+      )
+      .on(
+        "postgres_changes",
+        {
+          event: "DELETE",
+          schema: "public",
+          table: "messages",
+        },
+        (payload) => {
+          setMessages((prev) =>
+            prev.filter((msg) => msg.id !== payload.old.id)
+          );
         }
       )
       .subscribe();
@@ -94,6 +119,23 @@ const Chat = ({ channelId, onClose }) => {
     }
     setLoading(false);
   };
+
+  const handleDeleteChannel = async (messageId, messageUserId) => {
+    if (!currentUser || messageUserId !== currentUser.id) {
+      console.error("У вас нет прав на удаление сообщения");
+      return;
+    }
+
+    const { error } = await supabase
+      .from("messages")
+      .delete()
+      .eq("id", messageId);
+
+    if (error) {
+      console.error("Ошибка при удалении сообщения:", error);
+    }
+  };
+
   return (
     <div className="flex flex-col h-full max-h-[calc(100vh-20px)] xs:max-h-[calc(100vh-20)] bg-neutral-800 rounded-lg p-4 w-full relative">
       <button
@@ -110,13 +152,36 @@ const Chat = ({ channelId, onClose }) => {
       </button>
       <div className="flex-1 overflow-y-auto mt-6">
         {messages.map((message) => (
-          <div key={message.id} className="mb-2 p-2 bg-neutral-700 rounded-lg">
-            <p className="text-white">
-              <strong>{message.m_username}:</strong> {message.message}
-            </p>
-            <span className="text-xs text-gray-400">
-              {new Date(message.created_at).toLocaleTimeString()}
-            </span>
+          <div
+            key={message.id}
+            className="mb-2 p-2 bg-neutral-700 rounded-lg flex flex-col"
+          >
+            <div className="mb-0 flex items-center justify-between">
+              <div className="flex flex-col">
+                <p className="text-white mb-1">
+                  <strong>{message.m_username}:</strong> {message.message}
+                </p>
+                <span className="text-xs text-gray-400">
+                  {new Date(message.created_at).toLocaleTimeString()}
+                </span>
+              </div>
+
+              {currentUser && message.user_id === currentUser.id && (
+                <button
+                  onClick={() =>
+                    handleDeleteChannel(message.id, message.user_id)
+                  }
+                  className=""
+                >
+                  <Image
+                    src={"/TrashCan.svg"}
+                    alt="delete"
+                    width={20}
+                    height={20}
+                  />
+                </button>
+              )}
+            </div>
           </div>
         ))}
       </div>
