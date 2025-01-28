@@ -18,8 +18,8 @@ export const metadata = {
     images: [
       {
         url: "https://s3.amazonaws.com/protocols-files/files/j55jcz36.jpg",
-        width: 800,
-        height: 600,
+        width: 100,
+        height: 100,
       },
     ],
     locale: "ru_RU",
