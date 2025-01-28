@@ -19,11 +19,13 @@ const ChannelAvatar = ({ imageUrl, name }) => {
 
   // Если изображения нет, отображаем кружок с первыми двумя буквами
   const initials = name
-    .split(" ")
-    .map((word) => word[0])
-    .join("")
-    .toUpperCase()
-    .slice(0, 2);
+    ? name
+        .split(" ")
+        .map((word) => word[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2)
+    : "?";
 
   return (
     <div className="w-[35px] h-[35px] rounded-full bg-zinc-600 flex items-center justify-center text-white font-medium">

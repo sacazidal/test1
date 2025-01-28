@@ -141,7 +141,7 @@ const Chat = ({ channelId, onClose }) => {
   };
 
   return (
-    <div className="flex flex-col h-full max-h-[calc(100vh-20px)] xs:max-h-[calc(100vh-20)] bg-neutral-800 rounded-lg p-4 w-full relative">
+    <div className="flex flex-col h-full max-h-[calc(100vh-20px)] xs:max-h-[calc(100vh-20)] bg-neutral-800 rounded-lg p-4 w-full max-w-[360px] relative">
       <button
         className="absolute top-2 right-4 hover:bg-neutral-700 rounded-full transition-color"
         onClick={onClose}
@@ -158,11 +158,11 @@ const Chat = ({ channelId, onClose }) => {
         {messages.map((message) => (
           <div
             key={message.id}
-            className="mb-2 p-2 bg-neutral-700 rounded-lg flex flex-col"
+            className="mb-2 p-2 bg-neutral-700 rounded-lg flex flex-col max-w-sm"
           >
-            <div className="mb-0 flex items-center justify-between">
-              <div className="flex flex-col">
-                <p className="text-white mb-1">
+            <div className="mb-0 flex items-center gap-x-3">
+              <div className="flex flex-col min-w-10">
+                <p className="text-white mb-1 break-words whitespace-normal flex flex-col max-w-[300px]">
                   <strong>{message.m_username}:</strong> {message.message}
                 </p>
                 <span className="text-xs text-gray-400">
@@ -185,6 +185,7 @@ const Chat = ({ channelId, onClose }) => {
                       alt="delete"
                       width={20}
                       height={20}
+                      className=""
                     />
                   </button>
                 ))}
